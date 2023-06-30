@@ -1,0 +1,86 @@
+name: AUR Update
+author: TheWisker
+description: Updates AUR packages on release
+branding:
+  icon: package
+  color: blue
+inputs:
+  aur_key:
+    description: "AUR ssh private key"
+    required: true
+    default: ${{ secrets.AUR_KEY }}
+  aur_public_key:
+    description: "AUR ssh public key"
+    required: true
+    default: ${{ secrets.AUR_PKEY }}
+  ref:
+    description: "Checkout reference"
+    required: false
+    default: ${{ github.sha || "master" }}
+  username:
+    description: "Git username to use"
+    required: false
+    default: ${{ github.actor || "github-actions-bot"}}
+  email:
+    description: "Git email to use"
+    required: false
+    default: "github-actions-bot@noreply.com"
+  repo_name:
+    description: "Repository name"
+    required: false
+    default: ${{ github.event.repository.name }}
+  aur_folder:
+    description: "AUR files folder"
+    required: false
+    default: "./aur"
+  tag_name:
+    description: "Release tag name"
+    required: false
+    default: ${{ github.event.release.tag_name || "no-tag" }}
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Runtime
+      if: ${{ github.event_name == 'release' }}
+      env:
+        aur_key: ${{ inputs.aur_key }}
+        aur_public_key: ${{ inputs.aur_public_key }}
+      run: ${{ github.action_path }}/scripts/setup.sh
+      shell: bash
+    - name: Configure Git Credentials
+      if: ${{ github.event_name == 'release' }}
+      env:
+        username: ${{ inputs.username }}
+        email: ${{ inputs.email }}
+        repo_name: ${{ inputs.repo_name }}
+      run: ${{ github.action_path }}/scripts/git_config.sh
+      shell: bash
+    - name: Checkout
+      if: ${{ github.event_name == 'release' }}
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.ref }}
+    - name: Pull from AUR
+      if: ${{ github.event_name == 'release' }}
+      env:
+        aur_folder: ${{ inputs.aur_folder }}
+      run: ${{ github.action_path }}/scripts/aur_pull.sh
+      shell: bash
+    - name: Update PKGBUILDs and .SRCINFOs
+      if: ${{ github.event_name == 'release' }}
+      env:
+        aur_folder: ${{ inputs.aur_folder }}
+        tag_name: ${{ inputs.tag_name }}
+      run: ${{ github.action_path }}/scripts/aur_update.sh
+      shell: bash
+    - name: Push to AUR
+      if: ${{ github.event_name == 'release' }}
+      env:
+        aur_folder: ${{ inputs.aur_folder }}
+        tag_name: ${{ inputs.tag_name }}
+      run: ${{ github.action_path }}/scripts/aur_push.sh
+      shell: bash
+    - name: Push to ${{ inputs.repo_name }} repository
+      if: ${{ github.event_name == 'release' }}
+      run: ${{ github.action_path }}/scripts/repo_push.sh
+      shell: bash
