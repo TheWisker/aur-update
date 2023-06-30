@@ -8,23 +8,21 @@ inputs:
   aur_key:
     description: "AUR ssh private key"
     required: true
-    default: ${{ secrets.AUR_KEY }}
   aur_public_key:
     description: "AUR ssh public key"
     required: true
-    default: ${{ secrets.AUR_PKEY }}
   ref:
     description: "Checkout reference"
     required: false
-    default: ${{ github.sha || "master" }}
+    default: ${{ github.sha || 'master' }}
   username:
     description: "Git username to use"
     required: false
-    default: ${{ github.actor || "github-actions-bot"}}
+    default: ${{ github.actor || 'github-actions-bot' }}
   email:
     description: "Git email to use"
     required: false
-    default: "github-actions-bot@noreply.com"
+    default: github-actions-bot@noreply.com
   repo_name:
     description: "Repository name"
     required: false
@@ -36,7 +34,7 @@ inputs:
   tag_name:
     description: "Release tag name"
     required: false
-    default: ${{ github.event.release.tag_name || "no-tag" }}
+    default: ${{ github.event.release.tag_name || 'no-tag' }}
 runs:
   using: "composite"
   steps:
