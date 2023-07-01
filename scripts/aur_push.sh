@@ -1,5 +1,15 @@
 #!/bin/bash
 
+: '
+ @license AUR Update
+ aur_push.sh
+
+ Copyright (c) 2023, TheWisker.
+
+ This source code is licensed under the GNU license found in the
+ LICENSE file in the root directory of this source tree.
+'
+
 for folder in $aur_folder/*/; do    
     # Only run if it has a PKGBUILD file
     if [[ -f "${folder}PKGBUILD" ]]; then

@@ -1,5 +1,15 @@
 #!/bin/bash
 
+: '
+ @license AUR Update
+ setup.sh
+
+ Copyright (c) 2023, TheWisker.
+
+ This source code is licensed under the GNU license found in the
+ LICENSE file in the root directory of this source tree.
+'
+
 pacman -Syy --noconfirm --needed base-devel git openssh    
 echo "Installed Runtime Packages"
 mkdir -p /root/.ssh/

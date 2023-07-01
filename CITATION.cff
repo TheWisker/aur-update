@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software in your work, or make a fork of it, please cite it using the following metadata."
+authors:
+- given-names: "TheWisker"
+title: "AUR Update Action"
+version: 1
+date-released: 2023-07-01
+url: "https://github.com/TheWisker/aur-update"

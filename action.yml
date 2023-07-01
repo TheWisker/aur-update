@@ -20,6 +20,10 @@ inputs:
     description: "Git email to use"
     required: false
     default: github-actions-bot@noreply.com
+  repo:
+    description: "Repository"
+    required: false
+    default: ${{ github.repository }}
   repo_name:
     description: "Repository name"
     required: false
@@ -53,6 +57,7 @@ runs:
       if: ${{ github.event_name == 'release' }}
       uses: actions/checkout@v3
       with:
+        repository: ${{ inputs.repo }}
         ref: ${{ inputs.ref }}
     - name: Pull from AUR
       if: ${{ github.event_name == 'release' }}
