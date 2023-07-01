@@ -8,13 +8,10 @@ inputs:
   aur_key:
     description: "AUR ssh private key"
     required: true
-  aur_public_key:
-    description: "AUR ssh public key"
-    required: true
   ref:
     description: "Checkout reference"
     required: false
-    default: ${{ github.sha || 'master' }}
+    default: 'master'
   username:
     description: "Git username to use"
     required: false
@@ -42,8 +39,7 @@ runs:
       if: ${{ github.event_name == 'release' }}
       env:
         aur_key: ${{ inputs.aur_key }}
-        aur_public_key: ${{ inputs.aur_public_key }}
-      run: ${{ github.action_path }}/scripts/setup.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/setup.sh
       shell: bash
     - name: Configure Git Credentials
       if: ${{ github.event_name == 'release' }}
@@ -51,7 +47,7 @@ runs:
         username: ${{ inputs.username }}
         email: ${{ inputs.email }}
         repo_name: ${{ inputs.repo_name }}
-      run: ${{ github.action_path }}/scripts/git_config.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/git_config.sh
       shell: bash
     - name: Checkout
       if: ${{ github.event_name == 'release' }}
@@ -62,23 +58,23 @@ runs:
       if: ${{ github.event_name == 'release' }}
       env:
         aur_folder: ${{ inputs.aur_folder }}
-      run: ${{ github.action_path }}/scripts/aur_pull.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/aur_pull.sh
       shell: bash
     - name: Update PKGBUILDs and .SRCINFOs
       if: ${{ github.event_name == 'release' }}
       env:
         aur_folder: ${{ inputs.aur_folder }}
         tag_name: ${{ inputs.tag_name }}
-      run: ${{ github.action_path }}/scripts/aur_update.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/aur_update.sh
       shell: bash
     - name: Push to AUR
       if: ${{ github.event_name == 'release' }}
       env:
         aur_folder: ${{ inputs.aur_folder }}
         tag_name: ${{ inputs.tag_name }}
-      run: ${{ github.action_path }}/scripts/aur_push.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/aur_push.sh
       shell: bash
     - name: Push to ${{ inputs.repo_name }} repository
       if: ${{ github.event_name == 'release' }}
-      run: ${{ github.action_path }}/scripts/repo_push.sh
+      run: /__w/_actions/TheWisker/aur-update/master/scripts/repo_push.sh
       shell: bash
