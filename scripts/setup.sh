@@ -10,7 +10,7 @@
  LICENSE file in the root directory of this source tree.
 '
 
-pacman -Syy --noconfirm --needed base-devel git openssh    
+pacman -Syyu --noconfirm --needed base-devel git openssh    
 echo "Installed Runtime Packages"
 mkdir -p /root/.ssh/
 echo "Host *
